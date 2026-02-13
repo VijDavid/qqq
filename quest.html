@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-family: 'Arial', sans-serif;
+            gap: 40px;
+            padding: 40px;
+            overflow: hidden;
+        }
+        
+        .photo {
+            flex-shrink: 0;
+        }
+        
+        .photo img {
+            max-width: 400px;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        h1 {
+            color: #c44569;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .hearts {
+            font-size: 40px;
+            margin-bottom: 30px;
+            letter-spacing: 10px;
+        }
+        
+        p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .yes-btn {
+            background: #ff6b9d;
+            color: white;
+        }
+        
+        .yes-btn:hover {
+            background: #c44569;
+            transform: scale(1.05);
+        }
+        
+        .no-btn {
+            background: #ddd;
+            color: #666;
+        }
+        
+        .no-btn:hover {
+            background: #bbb;
+            transform: scale(0.95);
+        }
+        
+        .message {
+            display: none;
+            margin-top: 30px;
+            font-size: 24px;
+            color: #c44569;
+        }
+        
+        /* Celebration Animation Styles */
+        .hearts-falling {
+            position: fixed;
+            font-size: 30px;
+            pointer-events: none;
+            z-index: 5;
+            animation: fall 4s linear forwards;
+        }
+        
+        @keyframes fall {
+            0% { 
+                top: -10%;
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% { 
+                top: 110%;
+                opacity: 0;
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+        
+        .bubu-dudu-cat {
+            position: fixed;
+            font-size: 80px;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 15;
+        }
+        
+        .bubu {
+            left: 10%;
+            top: 50%;
+            animation: slideInLeft 1s ease-out forwards, bounce 0.5s ease-in-out 1s infinite;
+        }
+        
+        .dudu {
+            right: 10%;
+            top: 50%;
+            animation: slideInRight 1s ease-out forwards, bounce 0.5s ease-in-out 1s infinite;
+        }
+        
+        @keyframes slideInLeft {
+            0% {
+                left: -20%;
+                opacity: 0;
+            }
+            100% {
+                left: 10%;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInRight {
+            0% {
+                right: -20%;
+                opacity: 0;
+            }
+            100% {
+                right: 10%;
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 5;
+            animation: confettiFall 3s linear forwards;
+        }
+        
+        @keyframes confettiFall {
+            0% {
+                top: -10%;
+                opacity: 1;
+            }
+            100% {
+                top: 110%;
+                opacity: 0.5;
+                transform: rotate(720deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="photo">
+        <img src="photo3.jpg" alt="Photo">
+    </div>
+    <div class="container">
+        <div class="hearts">💝 💕 💝</div>
+        <h1>Will You Be My Valentine?</h1>
+        
+        <div class="buttons">
+            <button class="yes-btn" onclick="sayYes()">Yes ❤️</button>
+            <button class="no-btn" onclick="sayNo()">No</button>
+        </div>
+        
+        <div class="message" id="message"></div>
+    </div>
+    
+    <script>
+        let celebrationActive = false;
+        
+        function sayYes() {
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('message').textContent = '🎉 Yay! I love youuuuuu! 💕';
+            
+            if (!celebrationActive) {
+                celebrationActive = true;
+                createCelebration();
+            }
+        }
+        
+        function sayNo() {
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('message').textContent = 'Are you sure? 🥺';
+        }
+        
+        function createCelebration() {
+            // Create Bubu cat (left side)
+            const bubu = document.createElement('div');
+            bubu.className = 'bubu-dudu-cat bubu';
+            bubu.innerHTML = '<img src="bubu.png" style="width: 100%;">';
+            document.body.appendChild(bubu);
+            
+            // Create Dudu cat (right side)
+            const dudu = document.createElement('div');
+            dudu.className = 'bubu-dudu-cat dudu';
+            dudu.innerHTML = '<img src="dudu.png" style="width: 100%;">';
+            document.body.appendChild(dudu);
+            
+            // Create falling hearts
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '💝'];
+                    heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                    heart.className = 'hearts-falling';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 0.5 + 's';
+                    heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 100);
+            }
+            
+            // Create colorful confetti
+            const colors = ['#ff6b9d', '#c44569', '#ffd700', '#ff69b4', '#ff1493', '#ff6347'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 50);
+            }
+        }
+    </script>
+</body>
+</html>
